@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TeamStats – Player Performance Dashboard</title>
+
+    <style>
+        /* ---------------- THEME COLORS ---------------- */
+        :root {
+            --pink: #f7c6d9;
+            --purple: #d6c2ff;
+            --yellow: #fef3b7;
+            --dark: #333;
+            --white: #fff;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: var(--yellow);
+        }
+
+        /* ---------------- NAVBAR ---------------- */
+        nav {
+            background: var(--pink);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        nav input {
+            padding: 8px 12px;
+            width: 250px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+        }
+
+        /* ---------------- HERO ---------------- */
+        .banner {
+            background: linear-gradient(45deg, var(--pink), var(--purple), var(--yellow));
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--dark);
+        }
+
+        .banner h1 {
+            font-size: 40px;
+            margin: 0;
+        }
+
+        /* ---------------- DASHBOARD CARDS ---------------- */
+        .dashboard {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card h3 {
+            margin: 0;
+        }
+
+        /* ---------------- PLAYER LIST ---------------- */
+        .players-section {
+            padding: 30px;
+        }
+
+        .player-card {
+            background: var(--white);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .view-btn {
+            background: var(--purple);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* ---------------- FOOTER ---------------- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--purple);
+            color: var(--dark);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">TeamStats</div>
+        <input type="text" id="search" placeholder="Search players...">
+    </nav>
+
+    <section class="banner">
+        <h1>Track. Analyze. Improve.</h1>
+        <p>Your complete player performance management system</p>
+    </section>
+
+    <section class="dashboard">
+        <div class="section-title">Team Dashboard</div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Total Players</h3>
+                <p id="totalPlayers">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Training Sessions</h3>
+                <p>32 Completed</p>
+            </div>
+
+            <div class="card">
+                <h3>Recent Match Result</h3>
+                <p>Win vs Falcons (2 – 1)</p>
+            </div>
+
+            <div class="card">
+                <h3>Top Performer</h3>
+                <p id="topPlayer">Loading...</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="players-section">
+        <div class="section-title">Player List</div>
+        <div id="playerList"></div>
+    </section>
+
+    <footer>© 2025 TeamStats. All rights reserved.</footer>
+
+    <script>
+        /* ---------------- PLAYER DATA ---------------- */
+        const players = [
+            { name: "Aarav Sharma", goals: 12, assists: 4 },
+            { name: "Rohan Verma", goals: 5, assists: 10 },
+            { name: "Krish Patel", goals: 8, assists: 6 },
+            { name: "Reyansh Iyer", goals: 15, assists: 2 },
+        ];
+
+        document.getElementById("totalPlayers").innerText = players.length;
+
+        let top = players.reduce((max, p) => p.goals > max.goals ? p : max);
+        document.getElementById("topPlayer").innerText = top.name;
+
+        function renderPlayers(list) {
+            const container = document.getElementById("playerList");
+            container.innerHTML = "";
+            list.forEach(p => {
+                container.innerHTML += `
+                    <div class="player-card">
+                        <div>
+                            <strong>${p.name}</strong><br>
+                            Goals: ${p.goals} | Assists: ${p.assists}
+                        </div>
+                        <button class="view-btn">View</button>
+                    </div>
+                `;
+            });
+        }
+
+        renderPlayers(players);
+
+        document.getElementById("search").addEventListener("input", function () {
+            const keyword = this.value.toLowerCase();
+            const filtered = players.filter(p => p.name.toLowerCase().includes(keyword));
+            renderPlayers(filtered);
+        });
+    </script>
+
+</body>
+
+</html>
